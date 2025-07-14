@@ -40,8 +40,8 @@ jobs:
       - name: Cache Rust Dependencies
         uses: Swatinem/rust-cache@v2
 
-      - name: Update dependencies (required for patch usage)
-        run: cargo update
+      # - name: Update dependencies (required for patch usage)
+      #   run: cargo update
 
       - name: Type Checking
         run: cargo wasix check --target wasm32-wasmer-wasi --verbose --release --locked
