@@ -10,5 +10,5 @@ parking_lot = { version = "=0.12.1", features = ["nightly"] }
 
 [patch.crates-io]
 socket2 = { git = "https://github.com/wasix-org/socket2.git", branch = "v0.4.9" } # ← Added Line
-libc = { git = "https://github.com/wasix-org/libc.git" } # ← Added Line
-tokio = { git = "https://github.com/wasix-org/tokio.git", branch = "wasix-1.24.2" } # ← Added Line
+libc = { git = "https://github.com/wasix-org/libc", branch = "master" }
+tokio = { git = "https://github.com/wasix-org/tokio", branch = "wasix-1.24.2" }
