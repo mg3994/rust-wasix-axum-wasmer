@@ -7,11 +7,12 @@ edition = "2024"
 axum = { version = "0.8.4", features = ["tokio"] }
 tokio = { version = "=1.24.2", default-features = false, features = ["full"] }
 parking_lot = { version = "=0.12.1", features = ["nightly"] }
-hyper = { git = "https://github.com/wasix-org/hyper", branch = "v0.14.18" }
-libc = "=0.2.151"
-socket2 = "=0.4.9"
+hyper = { version = "0.14.27", package = "hyper" }
 
 [patch.crates-io]
-libc = { git = "https://github.com/wasix-org/libc", branch = "master" }
+# 👇 Match exact libc 0.2.139 (required by tokio 1.24.2)
+libc = { git = "https://github.com/wasix-org/libc", rev = "f4bc851" }
+
+# 👇 These are needed for Wasix compatibility
 tokio = { git = "https://github.com/wasix-org/tokio", branch = "wasix-1.24.2" }
 socket2 = { git = "https://github.com/wasix-org/socket2.git", branch = "v0.4.9" }
