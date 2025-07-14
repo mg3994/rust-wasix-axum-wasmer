@@ -5,13 +5,11 @@ edition = "2024"
 
 [dependencies]
 axum = { version = "0.8.4", features = ["tokio"] }
-tokio = { version = "1.24", default-features = false, features = ["full"] }
-parking_lot = { version = "0.12.1", features = ["nightly"] }
-hyper = { git = "https://github.com/wasix-org/hyper", branch = "v0.14.18" } # Patched for WASIX
-
-# Optional: you can add tracing/logging/middleware here as needed:
-# tracing = "0.1"
-# tower = "0.4"
+tokio = { version = "=1.24.2", default-features = false, features = ["full"] }
+parking_lot = { version = "=0.12.1", features = ["nightly"] }
+hyper = { git = "https://github.com/wasix-org/hyper", branch = "v0.14.18" }
+libc = "=0.2.151"
+socket2 = "=0.4.9"
 
 [patch.crates-io]
 libc = { git = "https://github.com/wasix-org/libc", branch = "master" }
