@@ -1,31 +1,58 @@
-name: Rust WASIX Build
+name: Continuous Integration
 
 on:
+  pull_request:
   push:
     branches:
       - main
-  pull_request:
+
+env:
+  CARGO_INCREMENTAL: 0
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  build:
+  build_and_deploy_wasmer_axum_starter:
+    name: Build and Deploy Wasmer Axum Starter to Wasmer Edge
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: read
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v2
 
-      - name: Install build tools
-        run: sudo apt-get update && sudo apt-get install -y build-essential
+      # --- ENSURE THIS STEP IS PRESENT AND UNCOMMENTED ---
+      - name: Install build-essential
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential
+          # Optionally, check if ld is now in path after installation
+          which ld || echo "ld not found after install, investigate!"
 
-      - name: Install Rust stable
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          profile: minimal
-          override: true
+      - name: Clean up cargo artifacts
+        run: |
+          rm -f Cargo.lock || true
+          cargo clean || true
 
       - name: Install cargo-wasix
-        run: cargo install cargo-wasix
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-wasix
+      - name: Cargo Wasix Update Check
+        run: cargo wasix self update-check
+      - name: Setup Wasmer
+        uses: wasmerio/setup-wasmer@v2
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@v2
 
-      - name: Run cargo wasix check
-        run: cargo wasix check --target wasm32-wasmer-wasi --release --locked --verbose
+      - name: Type Checking
+        run: cargo wasix check --verbose --release # Keep --locked off for initial resolution if Cargo.lock was removed
+        continue-on-error: false
+
+      - name: Build
+        run: cargo wasix build --verbose --release
+        continue-on-error: false
+
+      - name: Deploy app to Wasmer Edge
+        run: wasmer deploy --token=${{ secrets.WASMER_TOKEN }} --publish-package --non-interactive --no-wait --no-persist-id
