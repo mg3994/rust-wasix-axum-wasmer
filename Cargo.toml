@@ -5,8 +5,9 @@ edition = "2024"
 
 [dependencies]
 axum = { version = "0.8.4", features = ["tokio"] }
-tokio = { version = "1.46.1", default-features = false, features = ["full"] }
+tokio = { version = "1.24", default-features = false, features = ["full"] }
 parking_lot = { version = "=0.12.1", features = ["nightly"] }
+hyper = "0.14.27"  # WASIX compatible
 
 [patch.crates-io]
 socket2 = { git = "https://github.com/wasix-org/socket2.git", branch = "v0.4.9" } # ← Added Line
