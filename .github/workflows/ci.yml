@@ -1,9 +1,9 @@
-name: Rust Wasix Build
+name: Rust WASIX Build
 
 on:
   push:
-    branches: ['*']
-      
+    branches:
+      - main
   pull_request:
 
 jobs:
@@ -11,20 +11,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
-      - name: Install build dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential
-
-      - name: Setup Rust toolchain
-        uses: actions-rust-lang/setup-rust-toolchain@v1
+      - name: Install Rust stable
+        uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-          components: rustfmt, clippy
+          profile: minimal
+          override: true
+
+      - name: Install cargo-wasix
+        run: cargo install cargo-wasix
 
       - name: Run cargo wasix check
-        run: cargo wasix check --target wasm32-wasmer-wasi --verbose --release --locked
-  
+        run: cargo wasix check --target wasm32-wasmer-wasi --release --locked --verbose
