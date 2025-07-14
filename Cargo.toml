@@ -5,15 +5,12 @@ edition = "2024"
 
 [dependencies]
 axum = { version = "0.8.4", features = ["tokio"] }
-tokio = { version = "=1.24.2", default-features = false, features = ["full"] }
-parking_lot = { version = "0.12.1", features = ["nightly"] }
-hyper = "0.14.27"
+tokio = { version = "1.24", default-features = false, features = ["full"] }
+parking_lot = { version = "=0.12.1", features = ["nightly"] }
+hyper = "0.14.27"  # WASIX compatible
 
 [patch.crates-io]
-# ✅ Use exact rev for libc v0.2.139 (tokio requires this version!)
-libc = { git = "https://github.com/rust-lang/libc.git", rev = "f4bc851d2df0e92bb768893b25a607c9fc325818" }
-
-# ✅ WASIX-compatible forks
+libc = { git = "https://github.com/rust-lang/libc.git", rev = "7cbb8f2bf56e34a2a0b9a5b622b93359f6c9b8c2" }
 tokio = { git = "https://github.com/wasix-org/tokio", branch = "wasix-1.24.2" }
 socket2 = { git = "https://github.com/wasix-org/socket2", branch = "v0.4.9" }
-mio = { git = "https://github.com/wasix-org/mio", branch = "v0.8.11-wasix" } # optional: only if needed
+mio = { git = "https://github.com/wasix-org/mio", branch = "v0.8.11-wasix" }
