@@ -43,7 +43,7 @@ jobs:
         uses: Swatinem/rust-cache@v2
 
       - name: Ensure patched dependencies are used
-        run: cargo update
+        run: cargo update -p libc
 
       - name: Type check with Wasix target
         run: cargo wasix check --target wasm32-wasmer-wasi --verbose --release --locked
