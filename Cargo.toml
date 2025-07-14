@@ -1,15 +1,16 @@
 [package]
 name = "auth"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"  # or "2024" if you have confirmed support
 
 [dependencies]
 axum = { version = "0.8.4", features = ["tokio"] }
 tokio = { version = "1.24.2", default-features = false, features = ["full"] }
-parking_lot = { version = "=0.12.1", features = ["nightly"] }
+parking_lot = { version = "0.12.1", features = ["nightly"] }
 hyper = "0.14.27"
 
 [patch.crates-io]
-libc = { git = "https://github.com/rust-lang/libc.git", rev = "f4bc85111b2403a9c9cb49890305cb6b32c5af41" }
+libc = { git = "https://github.com/wasix-org/libc", branch = "master" }
 tokio = { git = "https://github.com/wasix-org/tokio", branch = "wasix-1.24.2" }
 socket2 = { git = "https://github.com/wasix-org/socket2.git", branch = "v0.4.9" }
+hyper = { git = "https://github.com/wasix-org/hyper", branch = "v0.14.18" }
