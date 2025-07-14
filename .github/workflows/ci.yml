@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Install system dependencies (ld, build tools)
         run: |
@@ -29,9 +29,13 @@ jobs:
           sudo apt-get install -y build-essential binutils
 
       - name: Setup Rust toolchain
-        uses: actions/setup-rust@v1.1.1
+        uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
           rust-version: stable
+          components: rustfmt, clippy
+          target: wasm32-unknown-unknown
+          cache: true
+          rustflags: "-D warnings"
 
       - name: Install cargo-wasix
         uses: taiki-e/install-action@v2
