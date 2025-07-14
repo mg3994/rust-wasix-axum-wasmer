@@ -1,66 +1,29 @@
-name: Deploy Wasmer Axum Starter to Wasmer Edge
+name: Rust Wasix Build
 
 on:
   push:
-    branches: ["*"]
+    branches:
+      - main
   pull_request:
-    branches: ["*"]
-  workflow_dispatch:
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
 
 jobs:
-  build_and_deploy:
-    name: Build and Deploy Wasmer Axum Starter
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install system dependencies (ld, build tools)
+      - name: Install build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential binutils
+          sudo apt-get install -y build-essential
 
       - name: Setup Rust toolchain
         uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
-          rust-version: stable
+          toolchain: stable
           components: rustfmt, clippy
-          target: wasm32-unknown-unknown
-          cache: true
-          rustflags: "-D warnings"
 
-      - name: Install cargo-wasix
-        uses: taiki-e/install-action@v2
-        with:
-          tool: cargo-wasix
-
-      - name: Check for cargo-wasix updates (optional)
-        run: cargo wasix self update-check
-
-      - name: Setup Wasmer CLI
-        uses: wasmerio/setup-wasmer@v2
-
-      - name: Cache Rust Dependencies
-        uses: Swatinem/rust-cache@v2
-
-      - name: Ensure patched dependencies are used
-        run: cargo update -p libc
-
-      - name: Type check with Wasix target
+      - name: Run cargo wasix check
         run: cargo wasix check --target wasm32-wasmer-wasi --verbose --release --locked
-
-      - name: Build Wasix binary
-        run: cargo wasix build --target wasm32-wasmer-wasi --verbose --release --locked
-
-      - name: Deploy to Wasmer Edge
-        env:
-          WASMER_TOKEN: ${{ secrets.WASMER_TOKEN }}
-        run: wasmer deploy --token=${{ env.WASMER_TOKEN }} --publish-package --non-interactive --no-wait --no-persist-id
