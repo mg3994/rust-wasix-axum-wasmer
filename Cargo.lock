@@ -22,6 +22,7 @@ name = "auth"
 version = "0.1.0"
 dependencies = [
  "axum",
+ "parking_lot",
  "tokio",
 ]
 
@@ -347,9 +348,9 @@ checksum = "42f5e15c9953c5e4ccceeb2e7382a716482c34515315f7b03532b8b4e8393d2d"
 
 [[package]]
 name = "parking_lot"
-version = "0.12.4"
+version = "0.12.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "70d58bf43669b5795d1576d0641cfb6fbb2057bf629506267a92807158584a13"
+checksum = "3742b2c103b9f06bc9fff0a37ff4912935851bee6d36f3c02bcc755bcfec228f"
 dependencies = [
  "lock_api",
  "parking_lot_core",
@@ -711,3 +712,18 @@ name = "windows_x86_64_msvc"
 version = "0.52.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "589f6da84c646204747d1270a2a5661ea66ed1cced2631d546fdfb155959f9ec"
+
+[[patch.unused]]
+name = "libc"
+version = "0.2.151"
+source = "git+https://github.com/wasix-org/libc.git#2c0250f5adab47f99d94ef80e82a87f7dfe5e8f5"
+
+[[patch.unused]]
+name = "socket2"
+version = "0.4.9"
+source = "git+https://github.com/wasix-org/socket2.git?branch=v0.4.9#a701d8559c11746b4facf3a6aa1b1de271e4ce16"
+
+[[patch.unused]]
+name = "tokio"
+version = "1.24.2"
+source = "git+https://github.com/wasix-org/tokio.git?branch=wasix-1.24.2#4bc57b23581a281338a59524b967e807773c7cd3"

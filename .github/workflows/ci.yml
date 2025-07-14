@@ -36,6 +36,9 @@ jobs:
       - name: Type Checking
         run: cargo wasix check --verbose --locked --release
         continue-on-error: false
+      - name: Run Update
+        run: cargo update
+        
       - name: Build
         run: cargo wasix build --verbose --locked --release
         continue-on-error: false
