@@ -2,9 +2,9 @@ name: Deploy Wasmer Axum Starter to Wasmer Edge
 
 on:
   push:
-    branches: [ "*" ]
+    branches: ["*"]
   pull_request:
-    branches: [ "*" ]
+    branches: ["*"]
   workflow_dispatch:
 
 concurrency:
@@ -28,16 +28,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential binutils
 
-      - name: Verify ld installation
-        run: ld --version
-
-      - name: Configure Cargo git fetch
-        run: |
-          mkdir -p ~/.cargo
-          echo '[net]' > ~/.cargo/config.toml
-          echo 'git-fetch-with-cli = true' >> ~/.cargo/config.toml
-
-      - uses: actions/setup-rust@v1
+      - name: Setup Rust toolchain
+        uses: actions/setup-rust@v1.1.1
         with:
           rust-version: stable
 
@@ -55,8 +47,8 @@ jobs:
       - name: Cache Rust Dependencies
         uses: Swatinem/rust-cache@v2
 
-      - name: Update Cargo dependencies fully
-        run: cargo update
+      - name: Ensure patched dependencies are used
+        run: cargo update -p libc
 
       - name: Type check with Wasix target
         run: cargo wasix check --target wasm32-wasmer-wasi --verbose --release --locked
@@ -65,4 +57,6 @@ jobs:
         run: cargo wasix build --target wasm32-wasmer-wasi --verbose --release --locked
 
       - name: Deploy to Wasmer Edge
-        run: wasmer deploy --token=${{ secrets.WASMER_TOKEN }} --publish-package --non-interactive --no-wait --no-persist-id
+        env:
+          WASMER_TOKEN: ${{ secrets.WASMER_TOKEN }}
+        run: wasmer deploy --token=${{ env.WASMER_TOKEN }} --publish-package --non-interactive --no-wait --no-persist-id
